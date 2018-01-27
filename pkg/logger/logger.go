@@ -22,7 +22,7 @@ func Init() {
 		Out:       os.Stdout,
 		Hooks:     make(logrus.LevelHooks),
 		Level:     level,
-		Formatter: &logrus.TextFormatter{},
+		Formatter: &logrus.JSONFormatter{},
 	}
 }
 

@@ -8,6 +8,7 @@ import (
 
 	"github.com/sudhanshuraheja/shipper/pkg/config"
 	"github.com/sudhanshuraheja/shipper/pkg/logger"
+	"github.com/sudhanshuraheja/shipper/pkg/uploader"
 )
 
 func main() {
@@ -26,9 +27,10 @@ func Init() *cli.App {
 	app.Usage = "This service ships binaries to the server"
 	app.Action = func(c *cli.Context) error {
 		logger.Infoln("Getting ready to ship")
-		logger.Infoln(c.String("key"))
-		logger.Infoln(c.String("file"))
-		logger.Infoln(c.String("bundle"))
+		err := uploader.Upload(c.String("key"), c.String("bundle"), c.String("file"))
+		if err != nil {
+			logger.Infoln(err)
+		}
 		return nil
 	}
 
