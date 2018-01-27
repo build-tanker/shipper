@@ -6,6 +6,7 @@
 
 # Binaries
 bin/*
+external/test.ipa
 
 # Test binary, build with `go test -c`
 *.test
