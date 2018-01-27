@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"github.com/sudhanshuraheja/shippers-uploader/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
 )
 
 var logger *logrus.Logger

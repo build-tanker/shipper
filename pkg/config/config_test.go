@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/sudhanshuraheja/shippers-uploader/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
 )
 
 func TestConfigValues(t *testing.T) {

@@ -5,8 +5,8 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/sudhanshuraheja/shippers-uploader/pkg/config"
-	"github.com/sudhanshuraheja/shippers-uploader/pkg/logger"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/logger"
 )
 
 func main() {
