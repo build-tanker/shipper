@@ -36,7 +36,7 @@ func (s *service) Install(server string) error {
 	conf := s.ctx.GetConfig()
 
 	if !conf.IsMissing() {
-		log.Errorln("Install failed. It seems you have a non-empty config\n$ rm $HOME/.shipper.toml")
+		log.Errorln("Install failed. It seems you have a non-empty config\n$ shipper uninstall")
 		return errors.New("Non empty config already present")
 	}
 
@@ -52,7 +52,7 @@ func (s *service) Install(server string) error {
 	}
 
 	// Save config file with accessKey and Server
-	err = s.writeConfigFile(conf.Server, accessKey)
+	err = s.writeConfigFile(server, accessKey)
 	if err != nil {
 		return err
 	}
@@ -138,8 +138,8 @@ func (s *service) writeConfigFile(server, accessKey string) error {
 
 	configFilePath := usr.HomeDir + "/.shipper.toml"
 	configData := `[application]
-	server = "%s"
-	accessKey = "%s"`
+server = "%s"
+accessKey = "%s"`
 	data := []byte(fmt.Sprintf(configData, server, accessKey))
 	return s.fs.WriteCompleteFileToDisk(configFilePath, data, 0644)
 }
