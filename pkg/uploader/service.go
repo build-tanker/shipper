@@ -2,8 +2,11 @@ package uploader
 
 import (
 	"errors"
+	"fmt"
+	"os/user"
 
 	"source.golabs.io/core/shipper/pkg/appcontext"
+	"source.golabs.io/core/shipper/pkg/filesystem"
 )
 
 type Service interface {
@@ -15,13 +18,16 @@ type Service interface {
 type service struct {
 	ctx    *appcontext.AppContext
 	client Client
+	fs     filesystem.FileSystem
 }
 
 func NewService(ctx *appcontext.AppContext) Service {
 	client := NewClient()
+	fs := filesystem.NewFileSystem()
 	return &service{
 		ctx:    ctx,
 		client: client,
+		fs:     fs,
 	}
 }
 
@@ -46,7 +52,7 @@ func (s *service) Install(server string) error {
 	}
 
 	// Save config file with accessKey and Server
-	err = conf.WriteFile(server, accessKey)
+	err = s.writeConfigFile(conf.Server, accessKey)
 	if err != nil {
 		return err
 	}
@@ -69,7 +75,7 @@ func (s *service) Uninstall() error {
 		return err
 	}
 	// Delete config file
-	err = conf.DeleteFile()
+	err = s.deleteConfigFile()
 	if err != nil {
 		return err
 	}
@@ -123,3 +129,27 @@ func (s *service) Upload(bundle string, file string) error {
 
 // 	return nil
 // }
+
+func (s *service) writeConfigFile(server, accessKey string) error {
+	usr, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	configFilePath := usr.HomeDir + "/.shipper.toml"
+	configData := `[application]
+	server = "%s"
+	accessKey = "%s"`
+	data := []byte(fmt.Sprintf(configData, server, accessKey))
+	return s.fs.WriteCompleteFileToDisk(configFilePath, data, 0644)
+}
+
+func (s *service) deleteConfigFile() error {
+	usr, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	configFilePath := usr.HomeDir + "/.shipper.toml"
+	return s.fs.DeleteFileFromDisk(configFilePath)
+}

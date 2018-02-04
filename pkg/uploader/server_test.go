@@ -3,6 +3,7 @@ package uploader
 import (
 	"errors"
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,6 +13,7 @@ import (
 )
 
 var testContext *appcontext.AppContext
+var testBuffer string
 
 func NewTestContext() *appcontext.AppContext {
 	if testContext == nil {
@@ -28,14 +30,9 @@ type MockClient struct {
 
 func (m *MockClient) ChangeState(newState string) {
 	m.TestState = newState
-	fmt.Println("Changing TestState")
-	fmt.Println(m.TestState)
 }
 
 func (m MockClient) GetAccessKey() (string, error) {
-	fmt.Println("Inside GetAccessKey")
-	fmt.Println(m.TestState)
-
 	if m.TestState == "AccessKeyOK" {
 		return "", nil
 	}
@@ -51,12 +48,37 @@ func (m MockClient) DeleteAccessKey() error {
 	return nil
 }
 
+type MockFileSystem struct {
+	TestState string
+	TestLog   string
+}
+
+func (m MockFileSystem) ReadCompleteFileFromDisk(path string) ([]byte, error) {
+	return []byte(""), nil
+}
+
+func (m MockFileSystem) WriteCompleteFileToDisk(path string, data []byte, permissions os.FileMode) error {
+	testBuffer = fmt.Sprintln("path", path, "data", string(data))
+	return nil
+}
+
+func (m MockFileSystem) DeleteFileFromDisk(path string) error {
+	testBuffer = fmt.Sprintln("delete", path)
+	return nil
+}
+
+func (m *MockFileSystem) GetTestLog() string {
+	return m.TestLog
+}
+
 func NewTestService() *service {
 	ctx := NewTestContext()
 	client := &MockClient{}
+	fs := &MockFileSystem{}
 	return &service{
 		ctx:    ctx,
 		client: client,
+		fs:     fs,
 	}
 }
 
@@ -110,5 +132,18 @@ func TestServiceUpload(t *testing.T) {
 
 	err = s.Upload("testBundle", "")
 	assert.Equal(t, "File path is missing", err.Error())
+}
 
+func TestServiceWriteConfigFile(t *testing.T) {
+	s := NewTestService()
+	err := s.writeConfigFile("testServer", "testAccessKey")
+	assert.Nil(t, err)
+	assert.Equal(t, "path /Users/sudhanshu/.shipper.toml data [application]\n\tserver = \"testServer\"\n\taccessKey = \"testAccessKey\"\n", testBuffer)
+}
+
+func TestServiceDeleteConfigFile(t *testing.T) {
+	s := NewTestService()
+	err := s.deleteConfigFile()
+	assert.Nil(t, err)
+	assert.Equal(t, "delete /Users/sudhanshu/.shipper.toml\n", testBuffer)
 }

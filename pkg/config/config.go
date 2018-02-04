@@ -34,11 +34,3 @@ func (c *Config) readLatestConfig() {
 func (c *Config) IsMissing() bool {
 	return c.Server == "" && c.AccessKey == ""
 }
-
-func (c *Config) WriteFile(server string, accessKey string) error {
-	return nil
-}
-
-func (c *Config) DeleteFile() error {
-	return nil
-}
