@@ -11,6 +11,7 @@ type Config struct {
 	name     string
 	version  string
 	logLevel string
+	server   string
 }
 
 func NewConfig() *Config {
@@ -55,8 +56,13 @@ func (c *Config) LogLevel() string {
 	return c.logLevel
 }
 
+func (c *Config) Server() string {
+	return c.server
+}
+
 func (c *Config) readLatestConfig() {
 	c.name = viper.GetString("application.name")
 	c.version = viper.GetString("application.version")
 	c.logLevel = viper.GetString("application.logLevel")
+	c.server = viper.GetString("application.server")
 }
