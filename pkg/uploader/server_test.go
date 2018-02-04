@@ -48,6 +48,14 @@ func (m MockClient) DeleteAccessKey() error {
 	return nil
 }
 
+func (m MockClient) GetUploadURL() (string, error) {
+	return "", nil
+}
+
+func (m MockClient) UploadFile(string, string) error {
+	return nil
+}
+
 type MockFileSystem struct {
 	TestState string
 	TestLog   string
@@ -138,7 +146,7 @@ func TestServiceWriteConfigFile(t *testing.T) {
 	s := NewTestService()
 	err := s.writeConfigFile("testServer", "testAccessKey")
 	assert.Nil(t, err)
-	assert.Equal(t, "path /Users/sudhanshu/.shipper.toml data [application]\n\tserver = \"testServer\"\n\taccessKey = \"testAccessKey\"\n", testBuffer)
+	assert.Equal(t, "path /Users/sudhanshu/.shipper.toml data [application]\nserver = \"testServer\"\naccessKey = \"testAccessKey\"\n", testBuffer)
 }
 
 func TestServiceDeleteConfigFile(t *testing.T) {

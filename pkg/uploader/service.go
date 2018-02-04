@@ -103,7 +103,16 @@ func (s *service) Upload(bundle string, file string) error {
 	}
 
 	// Get upload URL from client
+	url, err := s.client.GetUploadURL()
+	if err != nil {
+		return err
+	}
+
 	// Start file upload from filesystem
+	err = s.client.UploadFile(url, file)
+	if err != nil {
+		return err
+	}
 	// On completion tell client file upload is done with url
 
 	return nil
