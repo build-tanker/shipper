@@ -3,13 +3,11 @@ package uploader
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"time"
 
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 	"source.golabs.io/core/shipper/pkg/appcontext"
+	"source.golabs.io/core/shipper/pkg/requester"
 )
 
 // Client - interface to talk to tanker service
@@ -22,41 +20,24 @@ type Client interface {
 
 type client struct {
 	ctx *appcontext.AppContext
-	h   *http.Client
+	r   requester.Requester
 }
 
 // NewClient - create a new client to talk to tanker service
 func NewClient(ctx *appcontext.AppContext) Client {
-	h := &http.Client{
-		Timeout: time.Millisecond * 100,
-	}
+	r := requester.NewRequester()
 	return &client{
 		ctx: ctx,
-		h:   h,
+		r:   r,
 	}
 }
 
 func (c *client) GetAccessKey(server string) (string, error) {
 	url := fmt.Sprintf("%s/v1/shippers?name=%s&machineName=%s", server, uuid.NewV4(), "")
 
-	request, err := http.NewRequest(http.MethodPost, url, nil)
-	if err != nil {
-		return "", errors.Wrap(err, "Could not create request")
-	}
-	request.Header.Set("Content-Type", "application/json")
-
-	response, err := c.h.Do(request)
-	if err != nil {
-		return "", errors.Wrap(err, "Could not complete request")
-	}
-	defer response.Body.Close()
-
-	bytes, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return "", errors.Wrap(err, "Could not read response")
-	}
-
+	bytes, err := c.r.Post(url)
 	fmt.Println("bytes", string(bytes))
+	// request.Header.Set("Content-Type", "application/json")
 
 	var o ShipperAdd
 	err = json.Unmarshal(bytes, &o)
