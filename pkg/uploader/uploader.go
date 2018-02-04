@@ -5,7 +5,7 @@ import (
 )
 
 type Uploader interface {
-	Install(accessKey string) error
+	Install() error
 	Uninstall() error
 	Upload(bundle string, file string) error
 }
@@ -20,7 +20,7 @@ func NewUploader(ctx *appcontext.AppContext) Uploader {
 	}
 }
 
-func (u *uploader) Install(accessKey string) error {
+func (u *uploader) Install() error {
 	return nil
 }
 

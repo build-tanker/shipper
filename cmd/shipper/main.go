@@ -6,10 +6,10 @@ import (
 
 	"github.com/urfave/cli"
 
-	"source.golabs.io/core/tanker/pkg/appcontext"
-	"source.golabs.io/core/tanker/pkg/config"
-	"source.golabs.io/core/tanker/pkg/logger"
-	"source.golabs.io/core/tanker/pkg/uploader"
+	"source.golabs.io/core/shipper/pkg/appcontext"
+	"source.golabs.io/core/shipper/pkg/config"
+	"source.golabs.io/core/shipper/pkg/logger"
+	"source.golabs.io/core/shipper/pkg/uploader"
 )
 
 func main() {
@@ -27,7 +27,6 @@ func main() {
 	uploader := uploader.NewUploader(ctx)
 
 	app.Action = func(c *cli.Context) error {
-		logger.Infoln("Getting ready to ship")
 		err := uploader.Upload(c.String("bundle"), c.String("file"))
 		if err != nil {
 			logger.Infoln(err)
@@ -35,13 +34,24 @@ func main() {
 		return nil
 	}
 
-	app.Commands = []cli.Command{}
+	app.Commands = []cli.Command{
+		{
+			Name:  "install",
+			Usage: "install the service",
+			Action: func(c *cli.Context) error {
+				return uploader.Install()
+			},
+		},
+		{
+			Name:  "uninstall",
+			Usage: "uninstall the service",
+			Action: func(c *cli.Context) error {
+				return uploader.Uninstall()
+			},
+		},
+	}
 
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:  "key, k",
-			Usage: "access key for authentication",
-		},
 		cli.StringFlag{
 			Name:  "file, f",
 			Usage: "file to be uploaded",
