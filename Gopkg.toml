@@ -24,11 +24,6 @@
 #   go-tests = true
 #   unused-packages = true
 
-
-[[constraint]]
-  name = "github.com/fsnotify/fsnotify"
-  version = "1.4.7"
-
 [[constraint]]
   name = "github.com/spf13/viper"
   version = "1.0.0"
@@ -48,3 +43,7 @@
 [[constraint]]
   name = "github.com/pkg/errors"
   version = "0.8.0"
+
+[[constraint]]
+  name = "github.com/satori/go.uuid"
+  version = "1.2.0"

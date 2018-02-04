@@ -25,7 +25,7 @@ type service struct {
 
 // NewService - create a new service to install, uninstall and upload files from shipper
 func NewService(ctx *appcontext.AppContext) Service {
-	client := NewClient()
+	client := NewClient(ctx)
 	fs := filesystem.NewFileSystem()
 	return &service{
 		ctx:    ctx,
@@ -49,7 +49,7 @@ func (s *service) Install(server string) error {
 	}
 
 	// Get accessKey from client
-	accessKey, err := s.client.GetAccessKey()
+	accessKey, err := s.client.GetAccessKey(server)
 	if err != nil {
 		return errors.Wrap(err, "Could not get Access Key")
 	}
