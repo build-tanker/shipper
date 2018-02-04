@@ -7,7 +7,7 @@ import (
 )
 
 type Service interface {
-	Install() error
+	Install(server string) error
 	Uninstall() error
 	Upload(bundle string, file string) error
 }
@@ -22,13 +22,17 @@ func NewUploader(ctx *appcontext.AppContext) Service {
 	}
 }
 
-func (s *service) Install() error {
+func (s *service) Install(server string) error {
 	log := s.ctx.GetLogger()
 	conf := s.ctx.GetConfig()
 
 	if conf.IsMissing() == false {
 		log.Fatalln("Install failed. It seems you have a non-empty config at $HOME/.shipper.toml")
 		return errors.New("Non empty config already present")
+	}
+
+	if server == "" {
+		log.Fatalln("Install failed. Please enter the server that you would like to register with\n$ shipper install -server http://public.betas.in")
 	}
 
 	return nil

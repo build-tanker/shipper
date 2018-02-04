@@ -37,7 +37,13 @@ func main() {
 			Name:  "install",
 			Usage: "install the service",
 			Action: func(c *cli.Context) error {
-				return uploader.Install()
+				return uploader.Install(c.String("server"))
+			},
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "server, s",
+					Usage: "base url of the server",
+				},
 			},
 		},
 		{
@@ -57,10 +63,6 @@ func main() {
 		cli.StringFlag{
 			Name:  "bundle, b",
 			Usage: "app bundle to link to",
-		},
-		cli.StringFlag{
-			Name:  "server, s",
-			Usage: "base url of the server",
 		},
 	}
 
