@@ -20,8 +20,8 @@ func main() {
 	logger.Infoln("Starting shipper")
 
 	app := cli.NewApp()
-	app.Name = config.Name()
-	app.Version = config.Version()
+	app.Name = "shipper"
+	app.Version = "0.0.1"
 	app.Usage = "this binary uploads builds for distribution"
 
 	uploader := uploader.NewUploader(ctx)
@@ -59,6 +59,10 @@ func main() {
 		cli.StringFlag{
 			Name:  "bundle, b",
 			Usage: "app bundle to link to",
+		},
+		cli.StringFlag{
+			Name:  "server, s",
+			Usage: "base url of the server",
 		},
 	}
 
