@@ -6,28 +6,29 @@ import (
 
 	"github.com/urfave/cli"
 
-	"source.golabs.io/core/shipper/pkg/config"
-	"source.golabs.io/core/shipper/pkg/logger"
-	"source.golabs.io/core/shipper/pkg/uploader"
+	"source.golabs.io/core/tanker/pkg/appcontext"
+	"source.golabs.io/core/tanker/pkg/config"
+	"source.golabs.io/core/tanker/pkg/logger"
+	"source.golabs.io/core/tanker/pkg/uploader"
 )
 
 func main() {
-	config.Init()
-	logger.Init()
+	config := config.NewConfig()
+	logger := logger.NewLogger(config)
+	ctx := appcontext.NewAppContext(config, logger)
 
-	logger.Infoln("Shipper")
-	Init()
-}
+	logger.Infoln("Starting shipper")
 
-// Init : start the cli wrapper
-func Init() *cli.App {
 	app := cli.NewApp()
 	app.Name = config.Name()
 	app.Version = config.Version()
-	app.Usage = "This service ships binaries to the server"
+	app.Usage = "this binary uploads builds for distribution"
+
+	uploader := uploader.NewUploader(ctx)
+
 	app.Action = func(c *cli.Context) error {
 		logger.Infoln("Getting ready to ship")
-		err := uploader.Upload(c.String("key"), c.String("bundle"), c.String("file"))
+		err := uploader.Upload(c.String("bundle"), c.String("file"))
 		if err != nil {
 			logger.Infoln(err)
 		}
@@ -58,5 +59,4 @@ func Init() *cli.App {
 		panic(err)
 	}
 
-	return app
 }

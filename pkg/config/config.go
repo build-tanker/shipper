@@ -7,18 +7,15 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Config object
 type Config struct {
-	name         string
-	version      string
-	logLevel     string
-	uploadServer string
+	name     string
+	version  string
+	logLevel string
 }
 
-var config *Config
+func NewConfig() *Config {
+	config := &Config{}
 
-// Init config from file
-func Init() {
 	viper.AutomaticEnv()
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("..")
@@ -29,45 +26,34 @@ func Init() {
 	viper.SetDefault("application.name", "shipper")
 	viper.SetDefault("application.version", "NotDefined")
 	viper.SetDefault("application.logLevel", "debug")
-	viper.SetDefault("application.uploadServer", "http://localhost:8000")
 
 	viper.ReadInConfig()
 
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Printf("Config file %s was edited, reloading config\n", e.Name)
-		readLatestConfig()
+		config.readLatestConfig()
 	})
 
-	readLatestConfig()
+	config.readLatestConfig()
+
+	return config
 }
 
-func readLatestConfig() {
-	config = &Config{
-		name:         viper.GetString("application.name"),
-		version:      viper.GetString("application.version"),
-		logLevel:     viper.GetString("application.logLevel"),
-		uploadServer: viper.GetString("application.uploadServer"),
-	}
-
+func (c *Config) Name() string {
+	return c.name
 }
 
-// Name : Exporting Name
-func Name() string {
-	return config.name
+func (c *Config) Version() string {
+	return c.version
 }
 
-// Version : Export application version
-func Version() string {
-	return config.version
+func (c *Config) LogLevel() string {
+	return c.logLevel
 }
 
-// LogLevel : Export the log level
-func LogLevel() string {
-	return config.logLevel
-}
-
-// UploadServer : Get the upload server
-func UploadServer() string {
-	return config.uploadServer
+func (c *Config) readLatestConfig() {
+	c.name = viper.GetString("application.name")
+	c.version = viper.GetString("application.version")
+	c.logLevel = viper.GetString("application.logLevel")
 }

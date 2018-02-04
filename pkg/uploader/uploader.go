@@ -1,36 +1,57 @@
 package uploader
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
-
-	"source.golabs.io/core/shipper/pkg/config"
-	"source.golabs.io/core/shipper/pkg/logger"
+	"source.golabs.io/core/shipper/pkg/appcontext"
 )
 
-// Upload file for a specific buncle with an access key
-func Upload(key string, bundle string, file string) error {
-	logger.Infof("Key:%s Bundle:%s File:%s", key, bundle, file)
+type Uploader interface {
+	Install(accessKey string) error
+	Uninstall() error
+	Upload(bundle string, file string) error
+}
 
-	toUpload, err := os.Open(file)
-	if err != nil {
-		return err
+type uploader struct {
+	ctx *appcontext.AppContext
+}
+
+func NewUploader(ctx *appcontext.AppContext) Uploader {
+	return &uploader{
+		ctx: ctx,
 	}
-	defer toUpload.Close()
+}
 
-	serverURL := fmt.Sprintf("%s?key=%s&bundle=%s&file=%s", config.UploadServer(), key, bundle, file)
-	logger.Infof(serverURL)
+func (u *uploader) Install(accessKey string) error {
+	return nil
+}
 
-	response, err := http.Post(serverURL, "binary/octet-stream", toUpload)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
+func (u *uploader) Uninstall() error {
+	return nil
+}
 
-	message, _ := ioutil.ReadAll(response.Body)
-	logger.Infoln(string(message))
+func (u *uploader) Upload(bundle string, file string) error {
+	log := u.ctx.GetLogger()
+	log.Infoln("bundle:", bundle, "file:", file)
 
 	return nil
 }
+
+// 	toUpload, err := os.Open(file)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer toUpload.Close()
+
+// 	serverURL := fmt.Sprintf("%s?key=%s&bundle=%s&file=%s", config.UploadServer(), key, bundle, file)
+// 	logger.Infof(serverURL)
+
+// 	response, err := http.Post(serverURL, "binary/octet-stream", toUpload)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	defer response.Body.Close()
+
+// 	message, _ := ioutil.ReadAll(response.Body)
+// 	logger.Infoln(string(message))
+
+// 	return nil
+// }
