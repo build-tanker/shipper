@@ -30,6 +30,7 @@ func NewConfig() *Config {
 	viper.SetDefault("application.name", "shipper")
 	viper.SetDefault("application.version", "0.0.0")
 	viper.SetDefault("application.logLevel", "debug")
+	viper.SetDefault("application.server", "http://localhost:8080")
 
 	viper.ReadInConfig()
 
