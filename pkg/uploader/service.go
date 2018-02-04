@@ -6,25 +6,25 @@ import (
 	"source.golabs.io/core/shipper/pkg/appcontext"
 )
 
-type Uploader interface {
+type Service interface {
 	Install() error
 	Uninstall() error
 	Upload(bundle string, file string) error
 }
 
-type uploader struct {
+type service struct {
 	ctx *appcontext.AppContext
 }
 
-func NewUploader(ctx *appcontext.AppContext) Uploader {
-	return &uploader{
+func NewUploader(ctx *appcontext.AppContext) Service {
+	return &service{
 		ctx: ctx,
 	}
 }
 
-func (u *uploader) Install() error {
-	log := u.ctx.GetLogger()
-	conf := u.ctx.GetConfig()
+func (s *service) Install() error {
+	log := s.ctx.GetLogger()
+	conf := s.ctx.GetConfig()
 
 	if conf.IsMissing() == false {
 		log.Fatalln("Install failed. It seems you have a non-empty config at $HOME/.shipper.toml")
@@ -34,9 +34,9 @@ func (u *uploader) Install() error {
 	return nil
 }
 
-func (u *uploader) Uninstall() error {
-	log := u.ctx.GetLogger()
-	conf := u.ctx.GetConfig()
+func (s *service) Uninstall() error {
+	log := s.ctx.GetLogger()
+	conf := s.ctx.GetConfig()
 
 	if conf.IsMissing() {
 		log.Fatalln("Uninstall failed. It seems you don't have a valid config file")
@@ -46,9 +46,9 @@ func (u *uploader) Uninstall() error {
 	return nil
 }
 
-func (u *uploader) Upload(bundle string, file string) error {
-	log := u.ctx.GetLogger()
-	conf := u.ctx.GetConfig()
+func (s *service) Upload(bundle string, file string) error {
+	log := s.ctx.GetLogger()
+	conf := s.ctx.GetConfig()
 
 	if conf.IsMissing() {
 		log.Fatalln("It seems you have an empty config. Please run *shipper install* first")
