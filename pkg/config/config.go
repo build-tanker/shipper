@@ -17,14 +17,17 @@ func NewConfig() *Config {
 	config := &Config{}
 
 	viper.AutomaticEnv()
+
+	viper.AddConfigPath("$HOME")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("..")
 	viper.AddConfigPath("../..")
-	viper.SetConfigName("application")
+
+	viper.SetConfigName(".shipper")
 	viper.SetConfigType("toml")
 
 	viper.SetDefault("application.name", "shipper")
-	viper.SetDefault("application.version", "NotDefined")
+	viper.SetDefault("application.version", "0.0.0")
 	viper.SetDefault("application.logLevel", "debug")
 
 	viper.ReadInConfig()

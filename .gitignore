@@ -23,6 +23,7 @@ coverage.txt
 # Project Vendor folder
 vendor/
 application.toml
+.shipper.toml
 
 # External Data
 external/pgdata

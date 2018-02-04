@@ -2,4 +2,3 @@
 name = "shipper"
 version = "0.0.1"
 logLevel = "debug"
-uploadServer = "http://localhost:8000"

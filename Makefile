@@ -66,7 +66,7 @@ lint:
 ### Copy config from template
 copy-config:
 	@echo "$(GREEN_COLOR)Copying config from sample $(END_COLOR)"
-	cp application.toml.sample application.toml
+	cp .shipper.toml.sample .shipper.toml
 
 ### Manually test all packages
 test:
