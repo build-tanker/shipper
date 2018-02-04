@@ -13,12 +13,15 @@ type Service interface {
 }
 
 type service struct {
-	ctx *appcontext.AppContext
+	ctx    *appcontext.AppContext
+	client Client
 }
 
-func NewUploader(ctx *appcontext.AppContext) Service {
+func NewService(ctx *appcontext.AppContext) Service {
+	client := NewClient()
 	return &service{
-		ctx: ctx,
+		ctx:    ctx,
+		client: client,
 	}
 }
 
@@ -26,13 +29,14 @@ func (s *service) Install(server string) error {
 	log := s.ctx.GetLogger()
 	conf := s.ctx.GetConfig()
 
-	if conf.IsMissing() == false {
-		log.Fatalln("Install failed. It seems you have a non-empty config at $HOME/.shipper.toml")
+	if !conf.IsMissing() {
+		log.Errorln("Install failed. It seems you have a non-empty config\n$ rm $HOME/.shipper.toml")
 		return errors.New("Non empty config already present")
 	}
 
 	if server == "" {
-		log.Fatalln("Install failed. Please enter the server that you would like to register with\n$ shipper install -server http://public.betas.in")
+		log.Errorln("Install failed. Please enter the server that you would like to register with\n$ shipper install --server http://public.betas.in")
+		return errors.New("Server flag missing")
 	}
 
 	return nil
@@ -43,7 +47,7 @@ func (s *service) Uninstall() error {
 	conf := s.ctx.GetConfig()
 
 	if conf.IsMissing() {
-		log.Fatalln("Uninstall failed. It seems you don't have a valid config file")
+		log.Errorln("Uninstall failed. It seems you don't have a valid config file")
 		return errors.New("No config file found")
 	}
 
@@ -55,17 +59,17 @@ func (s *service) Upload(bundle string, file string) error {
 	conf := s.ctx.GetConfig()
 
 	if conf.IsMissing() {
-		log.Fatalln("It seems you have an empty config. Please run *shipper install* first")
+		log.Errorln("It seems you have an empty config. Please run *shipper install* first")
 		return errors.New("Need to install shipper first")
 	}
 
 	if bundle == "" {
-		log.Fatalln("Please enter the bundleID that you're uploading for")
+		log.Errorln("Please enter the bundleID that you're uploading for")
 		return errors.New("BundleID missing")
 	}
 
 	if file == "" {
-		log.Fatalln("Please enter the path of the file that you would like to upload")
+		log.Errorln("Please enter the path of the file that you would like to upload")
 		return errors.New("File path is missing")
 	}
 

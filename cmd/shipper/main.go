@@ -22,10 +22,10 @@ func main() {
 	app.Version = "0.0.1"
 	app.Usage = "this binary uploads builds for distribution"
 
-	uploader := uploader.NewUploader(ctx)
+	service := uploader.NewService(ctx)
 
 	app.Action = func(c *cli.Context) error {
-		err := uploader.Upload(c.String("bundle"), c.String("file"))
+		err := service.Upload(c.String("bundle"), c.String("file"))
 		if err != nil {
 			logger.Infoln(err)
 		}
@@ -37,7 +37,7 @@ func main() {
 			Name:  "install",
 			Usage: "install the service",
 			Action: func(c *cli.Context) error {
-				return uploader.Install(c.String("server"))
+				return service.Install(c.String("server"))
 			},
 			Flags: []cli.Flag{
 				cli.StringFlag{
@@ -50,7 +50,7 @@ func main() {
 			Name:  "uninstall",
 			Usage: "uninstall the service",
 			Action: func(c *cli.Context) error {
-				return uploader.Uninstall()
+				return service.Uninstall()
 			},
 		},
 	}
