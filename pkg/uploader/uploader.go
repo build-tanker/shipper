@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/sudhanshuraheja/shipper/pkg/config"
-	"github.com/sudhanshuraheja/shipper/pkg/logger"
+	"source.golabs.io/core/shipper/pkg/config"
+	"source.golabs.io/core/shipper/pkg/logger"
 )
 
 // Upload file for a specific buncle with an access key

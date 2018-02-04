@@ -6,9 +6,9 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/sudhanshuraheja/shipper/pkg/config"
-	"github.com/sudhanshuraheja/shipper/pkg/logger"
-	"github.com/sudhanshuraheja/shipper/pkg/uploader"
+	"source.golabs.io/core/shipper/pkg/config"
+	"source.golabs.io/core/shipper/pkg/logger"
+	"source.golabs.io/core/shipper/pkg/uploader"
 )
 
 func main() {

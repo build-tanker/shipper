@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"github.com/sudhanshuraheja/shipper/pkg/config"
+	"source.golabs.io/core/shipper/pkg/config"
 )
 
 var logger *logrus.Logger
