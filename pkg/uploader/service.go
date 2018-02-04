@@ -39,6 +39,18 @@ func (s *service) Install(server string) error {
 		return errors.New("Server flag missing")
 	}
 
+	// Get accessKey from client
+	accessKey, err := s.client.GetAccessKey()
+	if err != nil {
+		return err
+	}
+
+	// Save config file with accessKey and Server
+	err = conf.WriteFile(server, accessKey)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -49,6 +61,17 @@ func (s *service) Uninstall() error {
 	if conf.IsMissing() {
 		log.Errorln("Uninstall failed. It seems you don't have a valid config file")
 		return errors.New("No config file found")
+	}
+
+	// Remove accessKey from client
+	err := s.client.DeleteAccessKey()
+	if err != nil {
+		return err
+	}
+	// Delete config file
+	err = conf.DeleteFile()
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -72,6 +95,10 @@ func (s *service) Upload(bundle string, file string) error {
 		log.Errorln("Please enter the path of the file that you would like to upload")
 		return errors.New("File path is missing")
 	}
+
+	// Get upload URL from client
+	// Start file upload from filesystem
+	// On completion tell client file upload is done with url
 
 	return nil
 }

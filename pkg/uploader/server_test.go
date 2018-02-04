@@ -1,6 +1,8 @@
 package uploader
 
 import (
+	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,7 +22,34 @@ func NewTestContext() *appcontext.AppContext {
 	return testContext
 }
 
-type MockClient struct{}
+type MockClient struct {
+	TestState string
+}
+
+func (m *MockClient) ChangeState(newState string) {
+	m.TestState = newState
+	fmt.Println("Changing TestState")
+	fmt.Println(m.TestState)
+}
+
+func (m MockClient) GetAccessKey() (string, error) {
+	fmt.Println("Inside GetAccessKey")
+	fmt.Println(m.TestState)
+
+	if m.TestState == "AccessKeyOK" {
+		return "", nil
+	}
+
+	if m.TestState == "AccessKeyFailure" {
+		return "", errors.New("AccessKeyFailure")
+	}
+
+	return "", nil
+}
+
+func (m MockClient) DeleteAccessKey() error {
+	return nil
+}
 
 func NewTestService() *service {
 	ctx := NewTestContext()
@@ -44,8 +73,11 @@ func TestServiceInstall(t *testing.T) {
 	err = s.Install("")
 	assert.Equal(t, "Server flag missing", err.Error())
 
+	mc := s.client.(*MockClient)
+	mc.ChangeState("AccessKeyFailure")
+
 	err = s.Install("http://localhost:8000")
-	assert.Nil(t, err)
+	assert.Equal(t, "AccessKeyFailure", err.Error())
 
 }
 
