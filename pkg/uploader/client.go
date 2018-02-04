@@ -36,8 +36,9 @@ func (c *client) GetAccessKey(server string) (string, error) {
 	url := fmt.Sprintf("%s/v1/shippers?name=%s&machineName=%s", server, uuid.NewV4(), "")
 
 	bytes, err := c.r.Post(url)
-	fmt.Println("bytes", string(bytes))
-	// request.Header.Set("Content-Type", "application/json")
+	if err != nil {
+		return "", errors.Wrap(err, "Could not handle post request")
+	}
 
 	var o ShipperAdd
 	err = json.Unmarshal(bytes, &o)

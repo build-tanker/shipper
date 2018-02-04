@@ -21,7 +21,7 @@ type requester struct {
 
 func NewRequester() Requester {
 	c := &http.Client{
-		Timeout: time.Millisecond * 500,
+		Timeout: time.Millisecond * 1000,
 	}
 	return &requester{
 		c: c,
