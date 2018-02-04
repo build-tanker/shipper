@@ -23,10 +23,26 @@ func NewUploader(ctx *appcontext.AppContext) Uploader {
 }
 
 func (u *uploader) Install() error {
+	log := u.ctx.GetLogger()
+	conf := u.ctx.GetConfig()
+
+	if conf.IsMissing() == false {
+		log.Fatalln("Install failed. It seems you have a non-empty config at $HOME/.shipper.toml")
+		return errors.New("Non empty config already present")
+	}
+
 	return nil
 }
 
 func (u *uploader) Uninstall() error {
+	log := u.ctx.GetLogger()
+	conf := u.ctx.GetConfig()
+
+	if conf.IsMissing() {
+		log.Fatalln("Uninstall failed. It seems you don't have a valid config file")
+		return errors.New("No config file found")
+	}
+
 	return nil
 }
 
