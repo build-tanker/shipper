@@ -13,9 +13,9 @@ func NewConfig() *Config {
 	config := &Config{}
 
 	viper.AddConfigPath("$HOME")
-	viper.AddConfigPath(".")
-	viper.AddConfigPath("..")
-	viper.AddConfigPath("../..")
+	// viper.AddConfigPath(".")
+	// viper.AddConfigPath("..")
+	// viper.AddConfigPath("../..")
 
 	viper.SetConfigName(".shipper")
 	viper.SetConfigType("toml")

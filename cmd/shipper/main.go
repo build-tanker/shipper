@@ -17,8 +17,6 @@ func main() {
 	logger := logger.NewLogger(config)
 	ctx := appcontext.NewAppContext(config, logger)
 
-	logger.Infoln("Starting shipper")
-
 	app := cli.NewApp()
 	app.Name = "shipper"
 	app.Version = "0.0.1"

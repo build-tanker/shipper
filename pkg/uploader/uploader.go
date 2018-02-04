@@ -1,6 +1,8 @@
 package uploader
 
 import (
+	"errors"
+
 	"source.golabs.io/core/shipper/pkg/appcontext"
 )
 
@@ -30,7 +32,22 @@ func (u *uploader) Uninstall() error {
 
 func (u *uploader) Upload(bundle string, file string) error {
 	log := u.ctx.GetLogger()
-	log.Infoln("bundle:", bundle, "file:", file)
+	conf := u.ctx.GetConfig()
+
+	if conf.IsMissing() {
+		log.Fatalln("It seems you have an empty config. Please run *shipper install* first")
+		return errors.New("Need to install shipper first")
+	}
+
+	if bundle == "" {
+		log.Fatalln("Please enter the bundleID that you're uploading for")
+		return errors.New("BundleID missing")
+	}
+
+	if file == "" {
+		log.Fatalln("Please enter the path of the file that you would like to upload")
+		return errors.New("File path is missing")
+	}
 
 	return nil
 }

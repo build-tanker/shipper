@@ -13,7 +13,7 @@ type Logger struct {
 }
 
 func NewLogger(config *config.Config) *Logger {
-	level, err := logrus.ParseLevel(config.LogLevel())
+	level, err := logrus.ParseLevel("debug")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
