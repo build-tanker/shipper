@@ -62,3 +62,21 @@ func TestServiceUninstall(t *testing.T) {
 	err = s.Uninstall()
 	assert.Nil(t, err)
 }
+
+func TestServiceUpload(t *testing.T) {
+	s := NewTestService()
+
+	s.ctx.GetConfig().AccessKey = ""
+	s.ctx.GetConfig().Server = ""
+	err := s.Upload("testBundle", "testFile")
+	assert.Equal(t, "Need to install shipper first", err.Error())
+
+	s.ctx.GetConfig().AccessKey = "testAccessKey"
+	s.ctx.GetConfig().Server = "testServer"
+	err = s.Upload("", "testFile")
+	assert.Equal(t, "BundleID missing", err.Error())
+
+	err = s.Upload("testBundle", "")
+	assert.Equal(t, "File path is missing", err.Error())
+
+}
