@@ -1,14 +1,16 @@
 package uploader
 
 import (
-	"errors"
 	"fmt"
 	"os/user"
+
+	"github.com/pkg/errors"
 
 	"source.golabs.io/core/shipper/pkg/appcontext"
 	"source.golabs.io/core/shipper/pkg/filesystem"
 )
 
+// Service - service to install, uninstall and upload files from shipper
 type Service interface {
 	Install(server string) error
 	Uninstall() error
@@ -21,6 +23,7 @@ type service struct {
 	fs     filesystem.FileSystem
 }
 
+// NewService - create a new service to install, uninstall and upload files from shipper
 func NewService(ctx *appcontext.AppContext) Service {
 	client := NewClient()
 	fs := filesystem.NewFileSystem()
@@ -48,13 +51,13 @@ func (s *service) Install(server string) error {
 	// Get accessKey from client
 	accessKey, err := s.client.GetAccessKey()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not get Access Key")
 	}
 
 	// Save config file with accessKey and Server
 	err = s.writeConfigFile(server, accessKey)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not write config file")
 	}
 
 	return nil
@@ -72,12 +75,12 @@ func (s *service) Uninstall() error {
 	// Remove accessKey from client
 	err := s.client.DeleteAccessKey()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not delete access key")
 	}
 	// Delete config file
 	err = s.deleteConfigFile()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not delete config file")
 	}
 
 	return nil
@@ -105,44 +108,23 @@ func (s *service) Upload(bundle string, file string) error {
 	// Get upload URL from client
 	url, err := s.client.GetUploadURL()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not get upload URL")
 	}
 
 	// Start file upload from filesystem
 	err = s.client.UploadFile(url, file)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not upload file")
 	}
 	// On completion tell client file upload is done with url
 
 	return nil
 }
 
-// 	toUpload, err := os.Open(file)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer toUpload.Close()
-
-// 	serverURL := fmt.Sprintf("%s?key=%s&bundle=%s&file=%s", config.UploadServer(), key, bundle, file)
-// 	logger.Infof(serverURL)
-
-// 	response, err := http.Post(serverURL, "binary/octet-stream", toUpload)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer response.Body.Close()
-
-// 	message, _ := ioutil.ReadAll(response.Body)
-// 	logger.Infoln(string(message))
-
-// 	return nil
-// }
-
 func (s *service) writeConfigFile(server, accessKey string) error {
 	usr, err := user.Current()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not find current user in writeConfigFile")
 	}
 
 	configFilePath := usr.HomeDir + "/.shipper.toml"
@@ -156,7 +138,7 @@ accessKey = "%s"`
 func (s *service) deleteConfigFile() error {
 	usr, err := user.Current()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not find current user in deleteConfigFile")
 	}
 
 	configFilePath := usr.HomeDir + "/.shipper.toml"

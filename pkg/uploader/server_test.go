@@ -107,7 +107,7 @@ func TestServiceInstall(t *testing.T) {
 	mc.ChangeState("AccessKeyFailure")
 
 	err = s.Install("http://localhost:8000")
-	assert.Equal(t, "AccessKeyFailure", err.Error())
+	assert.Equal(t, "Could not get Access Key: AccessKeyFailure", err.Error())
 
 }
 

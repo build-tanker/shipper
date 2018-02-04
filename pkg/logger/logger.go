@@ -8,10 +8,12 @@ import (
 	"source.golabs.io/core/shipper/pkg/config"
 )
 
+// Logger - structure to hold the logrus logger
 type Logger struct {
 	*logrus.Logger
 }
 
+// NewLogger - create a new logrus logger
 func NewLogger(config *config.Config) *Logger {
 	level, err := logrus.ParseLevel("debug")
 	if err != nil {

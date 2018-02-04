@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// FileSystem - interface for os and io/ioutil
 type FileSystem interface {
 	ReadCompleteFileFromDisk(path string) ([]byte, error)
 	WriteCompleteFileToDisk(path string, data []byte, permissions os.FileMode) error
@@ -14,6 +15,7 @@ type FileSystem interface {
 type fileSystem struct {
 }
 
+// NewFileSystem - create a new filesystem to interface os and io/ioutil
 func NewFileSystem() FileSystem {
 	return &fileSystem{}
 }
