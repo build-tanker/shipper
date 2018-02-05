@@ -50,7 +50,7 @@ func (m MockClient) DeleteAccessKey(server, accessKey string) error {
 	return nil
 }
 
-func (m MockClient) GetUploadURL() (string, error) {
+func (m MockClient) GetUploadURL(server, accessKey, bundle string) (string, error) {
 	return "", nil
 }
 

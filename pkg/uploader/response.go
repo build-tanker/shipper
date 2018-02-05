@@ -16,3 +16,14 @@ type ShipperAddData struct {
 type ShipperDelete struct {
 	Success string `json:"success"`
 }
+
+// BuildAdd - response for Build:Add
+type BuildAdd struct {
+	Data    *BuildAddData `json:"data"`
+	Success string        `json:"success"`
+}
+
+// BuildAddData - intermediate object for Build:Add
+type BuildAddData struct {
+	URL string `json:"url"`
+}

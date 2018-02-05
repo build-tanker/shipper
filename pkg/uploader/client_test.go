@@ -3,6 +3,7 @@ package uploader
 import (
 	"testing"
 
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 
 	"source.golabs.io/core/shipper/pkg/requester"
@@ -31,6 +32,12 @@ func (m MockRequester) Post(url string) ([]byte, error) {
 	case "GetAccessKey":
 		bytes = []byte(`{ "data":{ "id":2, "access_key":"testAccessKey"},"success":"true" }`)
 		err = nil
+	case "GetUploadURLSuccess":
+		bytes = []byte(`{}`)
+		err = nil
+	case "GetUploadURLFailed":
+		bytes = []byte(`{}`)
+		err = errors.New("GetUploadURLFailed")
 	default:
 		bytes = []byte{}
 		err = nil
@@ -96,4 +103,17 @@ func TestDeleteAccessKey(t *testing.T) {
 	testState = "DeleteAccessKeyFailure"
 	err = c.DeleteAccessKey("mockServer", "mockAccessKey")
 	assert.Equal(t, "Could not delete AccessKey from the server", err.Error())
+}
+
+func TestGetUploadURL(t *testing.T) {
+	c := NewTestClient()
+	testState = "GetUploadURLSuccess"
+	url, err := c.GetUploadURL("mockServer", "mockAccessKey", "mockBundle")
+	assert.Nil(t, err)
+	assert.Equal(t, " ", url)
+
+	testState = "GetUploadURLFailed"
+	url, err = c.GetUploadURL("mockServer", "mockAccessKey", "mockBundle")
+	assert.Nil(t, err)
+	assert.Equal(t, " ", url)
 }

@@ -106,7 +106,7 @@ func (s *service) Upload(bundle string, file string) error {
 	}
 
 	// Get upload URL from client
-	url, err := s.client.GetUploadURL()
+	url, err := s.client.GetUploadURL(conf.Server, conf.AccessKey, bundle)
 	if err != nil {
 		return errors.Wrap(err, "Could not get upload URL")
 	}
