@@ -1,6 +1,7 @@
 package uploader
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -14,11 +15,12 @@ import (
 
 var testContext *appcontext.AppContext
 var testBuffer string
+var b bytes.Buffer
 
 func NewTestContext() *appcontext.AppContext {
 	if testContext == nil {
 		conf := config.NewConfig()
-		log := logger.NewLogger(conf)
+		log := logger.NewLogger(conf, &b)
 		testContext = appcontext.NewAppContext(conf, log)
 	}
 	return testContext

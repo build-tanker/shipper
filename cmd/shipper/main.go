@@ -14,7 +14,7 @@ import (
 
 func main() {
 	config := config.NewConfig()
-	logger := logger.NewLogger(config)
+	logger := logger.NewLogger(config, os.Stdout)
 	ctx := appcontext.NewAppContext(config, logger)
 
 	app := cli.NewApp()

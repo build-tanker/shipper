@@ -8,11 +8,11 @@ import (
 // AppContext - global context for config and logging
 type AppContext struct {
 	config *config.Config
-	logger *logger.Logger
+	logger logger.Logger
 }
 
 // NewAppContext - function to create a global context for conf and logging
-func NewAppContext(config *config.Config, logger *logger.Logger) *AppContext {
+func NewAppContext(config *config.Config, logger logger.Logger) *AppContext {
 	return &AppContext{
 		config: config,
 		logger: logger,
@@ -25,6 +25,6 @@ func (a *AppContext) GetConfig() *config.Config {
 }
 
 // GetLogger - fetch the logger from the global AppContext
-func (a *AppContext) GetLogger() *logger.Logger {
+func (a *AppContext) GetLogger() logger.Logger {
 	return a.logger
 }
