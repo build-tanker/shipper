@@ -3,6 +3,7 @@ package uploader
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
@@ -25,7 +26,7 @@ type client struct {
 
 // NewClient - create a new client to talk to tanker service
 func NewClient(ctx *appcontext.AppContext) Client {
-	r := requester.NewRequester()
+	r := requester.NewRequester(2 * time.Second)
 	return &client{
 		ctx: ctx,
 		r:   r,

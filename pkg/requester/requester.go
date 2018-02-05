@@ -19,9 +19,9 @@ type requester struct {
 	c *http.Client
 }
 
-func NewRequester() Requester {
+func NewRequester(timeout time.Duration) Requester {
 	c := &http.Client{
-		Timeout: time.Millisecond * 1000,
+		Timeout: timeout,
 	}
 	return &requester{
 		c: c,
