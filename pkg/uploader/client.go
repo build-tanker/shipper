@@ -13,7 +13,7 @@ import (
 // Client - interface to talk to tanker service
 type Client interface {
 	GetAccessKey(server string) (string, error)
-	DeleteAccessKey() error
+	DeleteAccessKey(server, accessKey string) error
 	GetUploadURL() (string, error)
 	UploadFile(string, string) error
 }
@@ -49,7 +49,24 @@ func (c *client) GetAccessKey(server string) (string, error) {
 	return o.Data.AccessKey, nil
 }
 
-func (c *client) DeleteAccessKey() error {
+func (c *client) DeleteAccessKey(server, accessKey string) error {
+	url := fmt.Sprintf("%s/v1/shippers/%s", server, accessKey)
+
+	bytes, err := c.r.Delete(url)
+	if err != nil {
+		return errors.Wrap(err, "Could not handle post request")
+	}
+
+	var o ShipperDelete
+	err = json.Unmarshal(bytes, &o)
+	if err != nil {
+		return errors.Wrap(err, "Could not unmarshall json")
+	}
+
+	if o.Success == "false" {
+		return errors.New("Could not delete AccessKey from the server")
+	}
+
 	return nil
 }
 

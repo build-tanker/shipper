@@ -32,7 +32,7 @@ func (m *MockClient) ChangeState(newState string) {
 	m.TestState = newState
 }
 
-func (m MockClient) GetAccessKey() (string, error) {
+func (m MockClient) GetAccessKey(server string) (string, error) {
 	if m.TestState == "AccessKeyOK" {
 		return "", nil
 	}
@@ -44,7 +44,7 @@ func (m MockClient) GetAccessKey() (string, error) {
 	return "", nil
 }
 
-func (m MockClient) DeleteAccessKey() error {
+func (m MockClient) DeleteAccessKey(server, accessKey string) error {
 	return nil
 }
 

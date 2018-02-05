@@ -73,7 +73,7 @@ func (s *service) Uninstall() error {
 	}
 
 	// Remove accessKey from client
-	err := s.client.DeleteAccessKey()
+	err := s.client.DeleteAccessKey(conf.Server, conf.AccessKey)
 	if err != nil {
 		return errors.Wrap(err, "Could not delete access key")
 	}
