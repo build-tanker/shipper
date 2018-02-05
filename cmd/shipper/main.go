@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	config := config.NewConfig()
+	config := config.NewConfig([]string{"$HOME"})
 	logger := logger.NewLogger(config, os.Stdout)
 	ctx := appcontext.NewAppContext(config, logger)
 

@@ -19,7 +19,7 @@ var b bytes.Buffer
 
 func NewTestContext() *appcontext.AppContext {
 	if testContext == nil {
-		conf := config.NewConfig()
+		conf := config.NewConfig([]string{"$HOME"})
 		log := logger.NewLogger(conf, &b)
 		testContext = appcontext.NewAppContext(conf, log)
 	}

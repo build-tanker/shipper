@@ -11,13 +11,12 @@ type Config struct {
 }
 
 // NewConfig - create a new configuration
-func NewConfig() *Config {
+func NewConfig(paths []string) *Config {
 	config := &Config{}
 
-	viper.AddConfigPath("$HOME")
-	// viper.AddConfigPath(".")
-	// viper.AddConfigPath("..")
-	// viper.AddConfigPath("../..")
+	for _, path := range paths {
+		viper.AddConfigPath(path)
+	}
 
 	viper.SetConfigName(".shipper")
 	viper.SetConfigType("toml")

@@ -10,7 +10,7 @@ import (
 )
 
 func TestLogger(t *testing.T) {
-	conf := config.NewConfig()
+	conf := config.NewConfig([]string{"$HOME"})
 	var b bytes.Buffer
 	log := NewLogger(conf, &b)
 	log.Errorln("Testing", "hello")
