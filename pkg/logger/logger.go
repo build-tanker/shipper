@@ -8,6 +8,7 @@ import (
 	"source.golabs.io/core/shipper/pkg/config"
 )
 
+// Logger - inteface for logrus
 type Logger interface {
 	Errorln(args ...interface{})
 	Infoln(args ...interface{})

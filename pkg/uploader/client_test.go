@@ -70,7 +70,7 @@ func NewMockRequester() requester.Requester {
 	return MockRequester{}
 }
 
-func NewTestClient() *client {
+func NewTestClient() Client {
 	ctx := NewTestContext()
 	r := NewMockRequester()
 	return &client{

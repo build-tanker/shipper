@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Requester - inteface to http.client
 type Requester interface {
 	Get(url string) ([]byte, error)
 	Post(url string) ([]byte, error)
@@ -19,6 +20,7 @@ type requester struct {
 	c *http.Client
 }
 
+// NewRequester - create a new requester which provides http.client
 func NewRequester(timeout time.Duration) Requester {
 	c := &http.Client{
 		Timeout: timeout,
