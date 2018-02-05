@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"sort"
 
 	"github.com/urfave/cli"
 
@@ -24,18 +23,10 @@ func main() {
 
 	service := uploader.NewService(ctx)
 
-	app.Action = func(c *cli.Context) error {
-		err := service.Upload(c.String("bundle"), c.String("file"))
-		if err != nil {
-			logger.Infoln(err)
-		}
-		return nil
-	}
-
 	app.Commands = []cli.Command{
 		{
 			Name:  "install",
-			Usage: "install the service",
+			Usage: "install the service, as, shipper install --server http://public.betas.in",
 			Action: func(c *cli.Context) error {
 				return service.Install(c.String("server"))
 			},
@@ -48,26 +39,29 @@ func main() {
 		},
 		{
 			Name:  "uninstall",
-			Usage: "uninstall the service",
+			Usage: "uninstall the service, as, shipper uninstall",
 			Action: func(c *cli.Context) error {
 				return service.Uninstall()
 			},
 		},
-	}
-
-	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:  "file, f",
-			Usage: "file to be uploaded",
+		{
+			Name:  "upload",
+			Usage: "upload a file to the service, as, shipper upload --bundle com.me.app --file ./file.ipa",
+			Action: func(c *cli.Context) error {
+				return service.Upload(c.String("bundle"), c.String("file"))
+			},
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "file, f",
+					Usage: "file to be uploaded",
+				},
+				cli.StringFlag{
+					Name:  "bundle, b",
+					Usage: "app bundle to link to",
+				},
+			},
 		},
-		cli.StringFlag{
-			Name:  "bundle, b",
-			Usage: "app bundle to link to",
-		},
 	}
-
-	sort.Sort(cli.FlagsByName(app.Flags))
-	sort.Sort(cli.CommandsByName(app.Commands))
 
 	if err := app.Run(os.Args); err != nil {
 		panic(err)
