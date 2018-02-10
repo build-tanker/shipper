@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/sirupsen/logrus"
-	"source.golabs.io/core/shipper/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
 )
 
 // Logger - inteface for logrus

@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 
-	"source.golabs.io/core/shipper/pkg/requester"
+	"github.com/sudhanshuraheja/shipper/pkg/requester"
 )
 
 var testState string

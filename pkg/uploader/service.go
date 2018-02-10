@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"source.golabs.io/core/shipper/pkg/appcontext"
-	"source.golabs.io/core/shipper/pkg/filesystem"
+	"github.com/sudhanshuraheja/shipper/pkg/appcontext"
+	"github.com/sudhanshuraheja/shipper/pkg/filesystem"
 )
 
 // Service - service to install, uninstall and upload files from shipper

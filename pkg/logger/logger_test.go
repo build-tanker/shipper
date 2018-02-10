@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"source.golabs.io/core/shipper/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
 )
 
 func TestLogger(t *testing.T) {

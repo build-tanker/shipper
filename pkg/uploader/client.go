@@ -7,8 +7,8 @@ import (
 
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
-	"source.golabs.io/core/shipper/pkg/appcontext"
-	"source.golabs.io/core/shipper/pkg/requester"
+	"github.com/sudhanshuraheja/shipper/pkg/appcontext"
+	"github.com/sudhanshuraheja/shipper/pkg/requester"
 )
 
 // Client - interface to talk to tanker service

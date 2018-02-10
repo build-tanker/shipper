@@ -1,8 +1,8 @@
 package appcontext
 
 import (
-	"source.golabs.io/core/shipper/pkg/config"
-	"source.golabs.io/core/shipper/pkg/logger"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/logger"
 )
 
 // AppContext - global context for config and logging

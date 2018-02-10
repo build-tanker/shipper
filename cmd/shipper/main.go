@@ -5,10 +5,10 @@ import (
 
 	"github.com/urfave/cli"
 
-	"source.golabs.io/core/shipper/pkg/appcontext"
-	"source.golabs.io/core/shipper/pkg/config"
-	"source.golabs.io/core/shipper/pkg/logger"
-	"source.golabs.io/core/shipper/pkg/uploader"
+	"github.com/sudhanshuraheja/shipper/pkg/appcontext"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/logger"
+	"github.com/sudhanshuraheja/shipper/pkg/uploader"
 )
 
 func main() {

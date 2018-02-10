@@ -8,9 +8,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"source.golabs.io/core/shipper/pkg/appcontext"
-	"source.golabs.io/core/shipper/pkg/config"
-	"source.golabs.io/core/shipper/pkg/logger"
+	"github.com/sudhanshuraheja/shipper/pkg/appcontext"
+	"github.com/sudhanshuraheja/shipper/pkg/config"
+	"github.com/sudhanshuraheja/shipper/pkg/logger"
 )
 
 var testContext *appcontext.AppContext
