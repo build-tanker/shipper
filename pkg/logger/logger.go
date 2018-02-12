@@ -10,7 +10,9 @@ import (
 
 // Logger - inteface for logrus
 type Logger interface {
+	Fatalln(args ...interface{})
 	Errorln(args ...interface{})
+	Debugln(args ...interface{})
 	Infoln(args ...interface{})
 }
 
@@ -26,7 +28,6 @@ func NewLogger(config *config.Config, w io.Writer) Logger {
 	}
 
 	l := &logrus.Logger{
-		// Out:       os.Stdout,
 		Out:       w,
 		Hooks:     make(logrus.LevelHooks),
 		Level:     level,
@@ -38,8 +39,16 @@ func NewLogger(config *config.Config, w io.Writer) Logger {
 	}
 }
 
+func (l *logger) Fatalln(args ...interface{}) {
+	l.l.Fatalln(args...)
+}
+
 func (l *logger) Errorln(args ...interface{}) {
 	l.l.Errorln(args...)
+}
+
+func (l *logger) Debugln(args ...interface{}) {
+	l.l.Debugln(args...)
 }
 
 func (l *logger) Infoln(args ...interface{}) {
