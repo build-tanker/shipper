@@ -3,12 +3,13 @@ package uploader
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
+	"github.com/gojekfarm/shipper/pkg/appcontext"
+	"github.com/gojekfarm/shipper/pkg/requester"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
-	"github.com/sudhanshuraheja/shipper/pkg/appcontext"
-	"github.com/sudhanshuraheja/shipper/pkg/requester"
 )
 
 // Client - interface to talk to tanker service

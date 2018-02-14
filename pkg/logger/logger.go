@@ -4,8 +4,8 @@ import (
 	"io"
 	"log"
 
+	"github.com/gojekfarm/shipper/pkg/config"
 	"github.com/sirupsen/logrus"
-	"github.com/sudhanshuraheja/shipper/pkg/config"
 )
 
 // Logger - inteface for logrus

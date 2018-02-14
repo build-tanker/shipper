@@ -5,10 +5,10 @@ import (
 
 	"github.com/urfave/cli"
 
-	"github.com/sudhanshuraheja/shipper/pkg/appcontext"
-	"github.com/sudhanshuraheja/shipper/pkg/config"
-	"github.com/sudhanshuraheja/shipper/pkg/logger"
-	"github.com/sudhanshuraheja/shipper/pkg/uploader"
+	"github.com/gojekfarm/shipper/pkg/appcontext"
+	"github.com/gojekfarm/shipper/pkg/config"
+	"github.com/gojekfarm/shipper/pkg/logger"
+	"github.com/gojekfarm/shipper/pkg/uploader"
 )
 
 func main() {

@@ -7,10 +7,10 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gojekfarm/shipper/pkg/appcontext"
+	"github.com/gojekfarm/shipper/pkg/config"
+	"github.com/gojekfarm/shipper/pkg/logger"
 	"github.com/stretchr/testify/assert"
-	"github.com/sudhanshuraheja/shipper/pkg/appcontext"
-	"github.com/sudhanshuraheja/shipper/pkg/config"
-	"github.com/sudhanshuraheja/shipper/pkg/logger"
 )
 
 var testContext *appcontext.AppContext
