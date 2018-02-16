@@ -3,7 +3,6 @@ package uploader
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/gojekfarm/shipper/pkg/appcontext"
@@ -27,7 +26,7 @@ type client struct {
 
 // NewClient - create a new client to talk to tanker service
 func NewClient(ctx *appcontext.AppContext) Client {
-	r := requester.NewRequester(2 * time.Second)
+	r := requester.NewRequester(10 * time.Minute)
 	return &client{
 		ctx: ctx,
 		r:   r,
@@ -91,30 +90,18 @@ func (c *client) GetUploadURL(server, accessKey, bundle string) (string, error) 
 		return "", errors.New("Could not get uploadURL from the server")
 	}
 
-	return "", nil
+	return o.Data.URL, nil
 }
 
 func (c *client) UploadFile(url string, file string) error {
+	c.ctx.GetLogger().Infoln(url)
+
+	bytes, err := c.r.Upload(url, file)
+	if err != nil {
+		return errors.Wrap(err, "uploader:client Could not handle upload")
+	}
+
+	c.ctx.GetLogger().Infoln(string(bytes))
+
 	return nil
 }
-
-// 	toUpload, err := os.Open(file)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer toUpload.Close()
-
-// 	serverURL := fmt.Sprintf("%s?key=%s&bundle=%s&file=%s", config.UploadServer(), key, bundle, file)
-// 	logger.Infof(serverURL)
-
-// 	response, err := http.Post(serverURL, "binary/octet-stream", toUpload)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	defer response.Body.Close()
-
-// 	message, _ := ioutil.ReadAll(response.Body)
-// 	logger.Infoln(string(message))
-
-// 	return nil
-// }
