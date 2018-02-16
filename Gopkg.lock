@@ -2,16 +2,6 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "github.com/afex/hystrix-go"
-  packages = [
-    "hystrix",
-    "hystrix/metric_collector",
-    "hystrix/rolling"
-  ]
-  revision = "f118cd938f786d24f46cc307981d8f63b7951020"
-
-[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -22,18 +12,6 @@
   packages = ["."]
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
   version = "v1.4.7"
-
-[[projects]]
-  name = "github.com/gojek-engineering/go-multierror"
-  packages = ["."]
-  revision = "895eb76f3d86f1a6f505a4e868a769a4068d9215"
-  version = "v1.0.0"
-
-[[projects]]
-  name = "github.com/gojek-engineering/heimdall"
-  packages = ["."]
-  revision = "2522aa23ce801b5d72fb3f3f3efecb17abd3a81a"
-  version = "v0.0.1"
 
 [[projects]]
   branch = "master"
@@ -175,6 +153,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "36adb7c508465b5f873ea7374980caf00fbd2a1d567446b7ff3de0ed4e388444"
+  inputs-digest = "2a7fe326a934f6f8b778d359aa270faa7ad2d1153c6975e3c00caf4326a03b09"
   solver-name = "gps-cdcl"
   solver-version = 1
