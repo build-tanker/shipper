@@ -52,7 +52,7 @@ func (r *requester) Delete(url string) ([]byte, error) {
 }
 
 func (r *requester) Upload(url string, file string) ([]byte, error) {
-	return r.call(http.MethodPost, url, file)
+	return r.call(http.MethodPut, url, file)
 }
 
 func (r *requester) call(method string, url string, filePath string) ([]byte, error) {
