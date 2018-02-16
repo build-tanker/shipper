@@ -9,7 +9,7 @@ import (
 )
 
 func TestRequester(t *testing.T) {
-	r := NewRequester(5 * time.Second)
+	r := NewRequester(5 * time.Minute)
 
 	bytes, err := r.Get("httpbin.org/ip")
 	assert.Equal(t, `Could not complete request: Get httpbin.org/ip: unsupported protocol scheme ""`, err.Error())
@@ -18,5 +18,9 @@ func TestRequester(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, true, strings.Contains(string(bytes), "http://httpbin.org/get"))
+
+	bytes, err = r.Upload("https://uguu.se/api.php?d=upload-tool", "../../external/test.txt")
+	assert.Nil(t, err)
+	assert.Equal(t, "", string(bytes))
 
 }

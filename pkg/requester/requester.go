@@ -1,8 +1,12 @@
 package requester
 
 import (
+	"bufio"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/pkg/errors"
@@ -14,6 +18,7 @@ type Requester interface {
 	Post(url string) ([]byte, error)
 	Put(url string) ([]byte, error)
 	Delete(url string) ([]byte, error)
+	Upload(url string, file string) ([]byte, error)
 }
 
 type requester struct {
@@ -31,23 +36,55 @@ func NewRequester(timeout time.Duration) Requester {
 }
 
 func (r *requester) Get(url string) ([]byte, error) {
-	return r.call(http.MethodGet, url)
+	return r.call(http.MethodGet, url, "")
 }
 
 func (r *requester) Post(url string) ([]byte, error) {
-	return r.call(http.MethodPost, url)
+	return r.call(http.MethodPost, url, "")
 }
 
 func (r *requester) Put(url string) ([]byte, error) {
-	return r.call(http.MethodPut, url)
+	return r.call(http.MethodPut, url, "")
 }
 
 func (r *requester) Delete(url string) ([]byte, error) {
-	return r.call(http.MethodDelete, url)
+	return r.call(http.MethodDelete, url, "")
 }
 
-func (r *requester) call(method string, url string) ([]byte, error) {
-	request, err := http.NewRequest(method, url, nil)
+func (r *requester) Upload(url string, file string) ([]byte, error) {
+	return r.call(http.MethodPost, url, file)
+}
+
+func (r *requester) call(method string, url string, filePath string) ([]byte, error) {
+
+	var request *http.Request
+	var err error
+
+	if filePath != "" {
+		// Trying to upload a file
+		file, err := os.Open(filePath)
+		if err != nil {
+			return []byte{}, errors.Wrap(err, "Could not open file")
+		}
+
+		pr, pw := io.Pipe()
+		bufin := bufio.NewReader(file)
+
+		go func() {
+			fmt.Println("Starting writing")
+			n, err := bufin.WriteTo(pw)
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println("Wrote", n)
+			pw.Close()
+		}()
+
+		request, err = http.NewRequest(method, url, pr)
+	} else {
+		request, err = http.NewRequest(method, url, nil)
+	}
+
 	if err != nil {
 		return []byte{}, errors.Wrap(err, "Could not create request")
 	}
