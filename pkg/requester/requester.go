@@ -40,10 +40,12 @@ func (r *requester) Get(url string) ([]byte, error) {
 }
 
 func (r *requester) Post(url string) ([]byte, error) {
+	// #TODO add body for post
 	return r.call(http.MethodPost, url, "")
 }
 
 func (r *requester) Put(url string) ([]byte, error) {
+	// #TODO add body for put
 	return r.call(http.MethodPut, url, "")
 }
 
