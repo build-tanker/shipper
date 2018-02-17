@@ -38,7 +38,7 @@ func TestRequester(t *testing.T) {
 
 	bytes, err = r.Upload("http://localhost:9000/upload", "../../external/test.txt")
 	assert.Nil(t, err)
-	assert.Equal(t, `{ "data": { "method": "upload" }, "success": "true" }`, string(bytes))
+	assert.Equal(t, `{ "data": { "method": "upload", "content": "hello-this-is-a-file" }, "success": "true" }`, string(bytes))
 
 	mockServer.Stop()
 }

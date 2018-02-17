@@ -2,6 +2,7 @@ package requester
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -93,6 +94,14 @@ func (m *MockServer) delete() HTTPHandler {
 
 func (m *MockServer) upload() HTTPHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
-		m.writeJSON(w, http.StatusOK, `{ "data": { "method": "upload" }, "success": "true" }`)
+
+		// https://gist.github.com/aodin/9493190
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+		}
+
+		json := fmt.Sprintf(`{ "data": { "method": "upload", "content": "%s" }, "success": "true" }`, string(body))
+		m.writeJSON(w, http.StatusOK, json)
 	}
 }
