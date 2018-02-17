@@ -101,7 +101,9 @@ func (c *client) UploadFile(url string, file string) error {
 		return errors.Wrap(err, "uploader:client Could not handle upload")
 	}
 
-	c.ctx.GetLogger().Infoln(string(bytes))
+	if string(bytes) != "" {
+		return errors.New(string(bytes))
+	}
 
 	return nil
 }
