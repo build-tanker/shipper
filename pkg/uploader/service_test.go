@@ -59,6 +59,10 @@ func (m MockClient) UploadFile(string, string) error {
 	return nil
 }
 
+func (m MockClient) ConfirmFileUpload(string, string) error {
+	return nil
+}
+
 type MockFileSystem struct {
 	TestState string
 	TestLog   string
@@ -99,18 +103,18 @@ func TestServiceInstall(t *testing.T) {
 	s.ctx.GetConfig().AccessKey = "testAccessKey"
 	s.ctx.GetConfig().Server = "testServer"
 	err := s.Install("http://localhost:8000")
-	assert.Equal(t, "Non empty config already present", err.Error())
+	assert.Equal(t, "uploader:service Non empty config already present", err.Error())
 
 	s.ctx.GetConfig().AccessKey = ""
 	s.ctx.GetConfig().Server = ""
 	err = s.Install("")
-	assert.Equal(t, "Server flag missing", err.Error())
+	assert.Equal(t, "uploader:service Server flag missing", err.Error())
 
 	mc := s.client.(*MockClient)
 	mc.ChangeState("AccessKeyFailure")
 
 	err = s.Install("http://localhost:8000")
-	assert.Equal(t, "Could not get Access Key: AccessKeyFailure", err.Error())
+	assert.Equal(t, "uploader:service Could not get Access Key: AccessKeyFailure", err.Error())
 
 }
 
@@ -120,7 +124,7 @@ func TestServiceUninstall(t *testing.T) {
 	s.ctx.GetConfig().AccessKey = ""
 	s.ctx.GetConfig().Server = ""
 	err := s.Uninstall()
-	assert.Equal(t, "No config file found", err.Error())
+	assert.Equal(t, "uploader:service No config file found", err.Error())
 
 	s.ctx.GetConfig().AccessKey = "testAccessKey"
 	s.ctx.GetConfig().Server = "testServer"
@@ -134,15 +138,15 @@ func TestServiceUpload(t *testing.T) {
 	s.ctx.GetConfig().AccessKey = ""
 	s.ctx.GetConfig().Server = ""
 	err := s.Upload("testBundle", "testFile")
-	assert.Equal(t, "Need to install shipper first", err.Error())
+	assert.Equal(t, "uploader:service Need to install shipper first", err.Error())
 
 	s.ctx.GetConfig().AccessKey = "testAccessKey"
 	s.ctx.GetConfig().Server = "testServer"
 	err = s.Upload("", "testFile")
-	assert.Equal(t, "BundleID missing", err.Error())
+	assert.Equal(t, "uploader:service BundleID missing", err.Error())
 
 	err = s.Upload("testBundle", "")
-	assert.Equal(t, "File path is missing", err.Error())
+	assert.Equal(t, "uploader:service File path is missing", err.Error())
 }
 
 func TestServiceWriteConfigFile(t *testing.T) {

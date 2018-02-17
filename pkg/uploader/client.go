@@ -17,6 +17,7 @@ type Client interface {
 	DeleteAccessKey(server, accessKey string) error
 	GetUploadURL(server, accessKey, bundle string) (string, error)
 	UploadFile(string, string) error
+	ConfirmFileUpload(server, accessKey string) error
 }
 
 type client struct {
@@ -94,8 +95,6 @@ func (c *client) GetUploadURL(server, accessKey, bundle string) (string, error) 
 }
 
 func (c *client) UploadFile(url string, file string) error {
-	c.ctx.GetLogger().Infoln(url)
-
 	bytes, err := c.r.Upload(url, file)
 	if err != nil {
 		return errors.Wrap(err, "uploader:client Could not handle upload")
@@ -105,5 +104,9 @@ func (c *client) UploadFile(url string, file string) error {
 		return errors.New(string(bytes))
 	}
 
+	return nil
+}
+
+func (c *client) ConfirmFileUpload(server, accessKey string) error {
 	return nil
 }
