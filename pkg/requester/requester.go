@@ -66,17 +66,16 @@ func (r *requester) call(method string, url string, filePath string) ([]byte, er
 		if err != nil {
 			return []byte{}, errors.Wrap(err, "Could not open file")
 		}
+		defer file.Close()
 
 		pr, pw := io.Pipe()
 		bufin := bufio.NewReader(file)
 
 		go func() {
-			fmt.Println("Starting writing")
-			n, err := bufin.WriteTo(pw)
+			_, err := bufin.WriteTo(pw)
 			if err != nil {
 				fmt.Println(err)
 			}
-			fmt.Println("Wrote", n)
 			pw.Close()
 		}()
 

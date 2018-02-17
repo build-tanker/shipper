@@ -33,10 +33,10 @@ func (m MockRequester) Post(url string) ([]byte, error) {
 		bytes = []byte(`{ "data":{ "id":2, "access_key":"testAccessKey"},"success":"true" }`)
 		err = nil
 	case "GetUploadURLSuccess":
-		bytes = []byte(`{}`)
+		bytes = []byte(`{ "data": { "url": "http://mockServer/fileUploadURL" }, "success": "true" }`)
 		err = nil
 	case "GetUploadURLFailed":
-		bytes = []byte(`{}`)
+		bytes = []byte(`{ "success": "false" }`)
 		err = errors.New("GetUploadURLFailed")
 	default:
 		bytes = []byte{}
@@ -71,6 +71,10 @@ func (m MockRequester) Delete(url string) ([]byte, error) {
 		err = nil
 	}
 	return bytes, err
+}
+
+func (m MockRequester) Upload(url string, file string) ([]byte, error) {
+	return []byte{}, nil
 }
 
 func NewMockRequester() requester.Requester {
@@ -110,10 +114,10 @@ func TestGetUploadURL(t *testing.T) {
 	testState = "GetUploadURLSuccess"
 	url, err := c.GetUploadURL("mockServer", "mockAccessKey", "mockBundle")
 	assert.Nil(t, err)
-	assert.Equal(t, " ", url)
+	assert.Equal(t, "http://mockServer/fileUploadURL", url)
 
 	testState = "GetUploadURLFailed"
 	url, err = c.GetUploadURL("mockServer", "mockAccessKey", "mockBundle")
-	assert.Nil(t, err)
-	assert.Equal(t, " ", url)
+	assert.Equal(t, "Could not handle post request: GetUploadURLFailed", err.Error())
+	assert.Equal(t, "", url)
 }
