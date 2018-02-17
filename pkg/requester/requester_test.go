@@ -13,7 +13,7 @@ func TestRequester(t *testing.T) {
 
 	// Fail with http / https
 	_, err := r.Get("httpbin.org/ip")
-	assert.Equal(t, `Could not complete request: Get httpbin.org/ip: unsupported protocol scheme ""`, err.Error())
+	assert.Equal(t, `requester:call Could not complete request: Get httpbin.org/ip: unsupported protocol scheme ""`, err.Error())
 }
 
 func TestRequesterGet(t *testing.T) {
@@ -47,7 +47,10 @@ func TestRequesterDelete(t *testing.T) {
 func TestRequestUplaod(t *testing.T) {
 	r := NewRequester(5 * time.Minute)
 
-	bytes, err := r.Upload("https://requestb.in/10w4sue1", "../../external/test.txt")
+	bytes, err := r.Upload("https://requestb.in/10w4sue1", "../../external/test.fakeFile")
+	assert.Equal(t, true, strings.Contains(err.Error(), "Could not open file"))
+
+	bytes, err = r.Upload("https://requestb.in/10w4sue1", "../../external/test.txt")
 	assert.Nil(t, err)
 	assert.Equal(t, "ok", string(bytes))
 

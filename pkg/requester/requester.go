@@ -66,7 +66,7 @@ func (r *requester) call(method string, url string, filePath string) ([]byte, er
 		// Trying to upload a file
 		file, err := os.Open(filePath)
 		if err != nil {
-			return []byte{}, errors.Wrap(err, "Could not open file")
+			return []byte{}, errors.Wrap(err, "requester:call Could not open file")
 		}
 		defer file.Close()
 
@@ -87,18 +87,18 @@ func (r *requester) call(method string, url string, filePath string) ([]byte, er
 	}
 
 	if err != nil {
-		return []byte{}, errors.Wrap(err, "Could not create request")
+		return []byte{}, errors.Wrap(err, "requester:call Could not create request")
 	}
 
 	response, err := r.c.Do(request)
 	if err != nil {
-		return []byte{}, errors.Wrap(err, "Could not complete request")
+		return []byte{}, errors.Wrap(err, "requester:call Could not complete request")
 	}
 	defer response.Body.Close()
 
 	bytes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return []byte{}, errors.Wrap(err, "Could not read response")
+		return []byte{}, errors.Wrap(err, "requester:call Could not read response")
 	}
 
 	return bytes, nil
