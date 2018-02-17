@@ -1,7 +1,6 @@
 package requester
 
 import (
-	"strings"
 	"testing"
 	"time"
 
@@ -9,51 +8,37 @@ import (
 )
 
 func TestRequester(t *testing.T) {
+	mockServer := MockServer{}
+	mockServer.Start("9000")
+
 	r := NewRequester(5 * time.Minute)
 
 	// Fail with http / https
-	_, err := r.Get("httpbin.org/ip")
-	assert.Equal(t, `requester:call Could not complete request: Get httpbin.org/ip: unsupported protocol scheme ""`, err.Error())
-}
+	_, err := r.Get("localhost:9000/get")
+	assert.Equal(t, `requester:call Could not complete request: Get localhost:9000/get: unsupported protocol scheme "localhost"`, err.Error())
 
-func TestRequesterGet(t *testing.T) {
-	r := NewRequester(5 * time.Minute)
-	bytes, err := r.Get("http://httpbin.org/get")
+	bytes, err := r.Get("http://localhost:9000/get")
 	assert.Nil(t, err)
-	assert.Equal(t, true, strings.Contains(string(bytes), "http://httpbin.org/get"))
-}
+	assert.Equal(t, `{ "data": { "method": "get" }, "success": "true" }`, string(bytes))
 
-func TestRequesterPost(t *testing.T) {
-	r := NewRequester(5 * time.Minute)
-	bytes, err := r.Post("http://httpbin.org/post")
+	bytes, err = r.Post("http://localhost:9000/post")
 	assert.Nil(t, err)
-	assert.Equal(t, true, strings.Contains(string(bytes), "http://httpbin.org/post"))
-}
+	assert.Equal(t, `{ "data": { "method": "post" }, "success": "true" }`, string(bytes))
 
-func TestRequesterPut(t *testing.T) {
-	r := NewRequester(5 * time.Minute)
-	bytes, err := r.Put("http://httpbin.org/put")
+	bytes, err = r.Put("http://localhost:9000/put")
 	assert.Nil(t, err)
-	assert.Equal(t, true, strings.Contains(string(bytes), "http://httpbin.org/put"))
-}
+	assert.Equal(t, `{ "data": { "method": "put" }, "success": "true" }`, string(bytes))
 
-func TestRequesterDelete(t *testing.T) {
-	r := NewRequester(5 * time.Minute)
-	bytes, err := r.Delete("http://httpbin.org/delete")
+	bytes, err = r.Delete("http://localhost:9000/delete")
 	assert.Nil(t, err)
-	assert.Equal(t, true, strings.Contains(string(bytes), "http://httpbin.org/delete"))
-}
+	assert.Equal(t, `{ "data": { "method": "delete" }, "success": "true" }`, string(bytes))
 
-func TestRequestUplaod(t *testing.T) {
-	r := NewRequester(5 * time.Minute)
+	bytes, err = r.Upload("http://localhost:9000/upload", "../../external/test.fakeFile")
+	assert.Equal(t, "requester:call Could not open file: open ../../external/test.fakeFile: no such file or directory", err.Error())
 
-	bytes, err := r.Upload("https://requestb.in/10w4sue1", "../../external/test.fakeFile")
-	assert.Equal(t, true, strings.Contains(err.Error(), "Could not open file"))
-
-	bytes, err = r.Upload("https://requestb.in/10w4sue1", "../../external/test.txt")
+	bytes, err = r.Upload("http://localhost:9000/upload", "../../external/test.txt")
 	assert.Nil(t, err)
-	assert.Equal(t, "ok", string(bytes))
+	assert.Equal(t, `{ "data": { "method": "upload" }, "success": "true" }`, string(bytes))
 
-	bytes, err = r.Get("https://requestb.in/10w4sue1?inspect")
-	assert.Equal(t, true, strings.Contains(string(bytes), "hello-this-is-a-file"))
+	mockServer.Stop()
 }
