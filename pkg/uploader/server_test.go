@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/gojekfarm/shipper/pkg/appcontext"
@@ -148,7 +149,7 @@ func TestServiceWriteConfigFile(t *testing.T) {
 	s := NewTestService()
 	err := s.writeConfigFile("testServer", "testAccessKey")
 	assert.Nil(t, err)
-	assert.Equal(t, "path /Users/sudhanshu/.shipper.toml data [application]\nserver = \"testServer\"\naccessKey = \"testAccessKey\"\n", testBuffer)
+	assert.Equal(t, true, strings.Contains(testBuffer, ".shipper.toml data [application]\nserver = \"testServer\"\naccessKey = \"testAccessKey\"\n"))
 }
 
 func TestServiceDeleteConfigFile(t *testing.T) {
@@ -156,4 +157,5 @@ func TestServiceDeleteConfigFile(t *testing.T) {
 	err := s.deleteConfigFile()
 	assert.Nil(t, err)
 	assert.Equal(t, "delete /Users/sudhanshu/.shipper.toml\n", testBuffer)
+	assert.Equal(t, true, strings.Contains(testBuffer, "delete") && strings.Contains(testBuffer, "/.shipper.toml\n"))
 }
