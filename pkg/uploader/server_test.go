@@ -156,6 +156,5 @@ func TestServiceDeleteConfigFile(t *testing.T) {
 	s := NewTestService()
 	err := s.deleteConfigFile()
 	assert.Nil(t, err)
-	assert.Equal(t, "delete /Users/sudhanshu/.shipper.toml\n", testBuffer)
 	assert.Equal(t, true, strings.Contains(testBuffer, "delete") && strings.Contains(testBuffer, "/.shipper.toml\n"))
 }
