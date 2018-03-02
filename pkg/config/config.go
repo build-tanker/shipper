@@ -14,6 +14,8 @@ type Config struct {
 func NewConfig(paths []string) *Config {
 	config := &Config{}
 
+	viper.AutomaticEnv()
+
 	for _, path := range paths {
 		viper.AddConfigPath(path)
 	}
