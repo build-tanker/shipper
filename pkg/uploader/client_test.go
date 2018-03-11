@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/gojekfarm/shipper/pkg/requester"
+	"github.com/build-tanker/shipper/pkg/requester"
 )
 
 var testState string

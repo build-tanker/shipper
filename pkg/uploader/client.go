@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/gojekfarm/shipper/pkg/appcontext"
-	"github.com/gojekfarm/shipper/pkg/requester"
+	"github.com/build-tanker/shipper/pkg/appcontext"
+	"github.com/build-tanker/shipper/pkg/requester"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 )

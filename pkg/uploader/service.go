@@ -6,8 +6,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/gojekfarm/shipper/pkg/appcontext"
-	"github.com/gojekfarm/shipper/pkg/filesystem"
+	"github.com/build-tanker/shipper/pkg/appcontext"
+	"github.com/build-tanker/shipper/pkg/filesystem"
 )
 
 // Service - service to install, uninstall and upload files from shipper
